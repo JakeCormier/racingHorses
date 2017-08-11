@@ -146,6 +146,8 @@ class Race {
     }
 }
 
+
+
 let jubilee = Horse(name: "Jubilee", maxSpeed: 16)
 let sonora = Horse(name: "Sonora", maxSpeed: 17)
 let jasper = Horse(name: "Jasper", maxSpeed: 17)
@@ -154,6 +156,35 @@ let participants = [jubilee, sonora, jasper]
 
 let race = Race(laps: 1, participants: participants)
 let tracker = Tracker()
-
+let broadcaster = RaceBroadcaster()
+race.delegate = broadcaster
+//delegation - not seen by the entire thing but job is still done
 race.delegate = tracker
 race.start()
+
+
+class RaceManager: HorseRaceDelegate {
+    //starts the race 
+    //acts as the delgat to the race
+    //circular relationship
+    //make delgate properties weak in general - to not cause any issues
+    let race: Race
+    
+    init(race: Race) {
+        self.race = race
+        race.delegate = self
+        race.start()
+    }
+    
+    func race(_ race: Race, didStartAt time: Date) {
+        // some implementation
+    }
+    
+    func addLapLeader(_ horse: Horse, forLap lap: Int, atTime time: Date) {
+        // some implementation
+    }
+    
+    func race(_ race: Race, didEndAt time: Date, withWinner winner: Horse) {
+        // some implementation
+    }
+}
